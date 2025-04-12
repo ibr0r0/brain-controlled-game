@@ -18,16 +18,13 @@ let blinkTimeout = null;
 let latestAlpha = 0;
 
 
-// تحميل صورة العصفور
 const birdImg = new Image();
 birdImg.src = 'bird.png';
 
-// رسم العصفور
 function drawBird() {
   ctx.drawImage(birdImg, 85, birdY - 15, 50, 50); // حجم 30x30
 }
 
-// التحديث المستمر
 function update() {
   velocity += gravity;
   birdY += velocity;
@@ -68,14 +65,13 @@ ctx.fillText(`Alpha: ${latestAlpha.toFixed(2)}`, 20, 580);
 ctx.fillText(`Baseline: ${alphaBaseline.toFixed(2)}`, 160, 580);
 ctx.fillText(`Threshold: ${(alphaBaseline * 1.4).toFixed(2)}`, 300, 580);
 
-// WebSocket لتوصيل البيانات
 const socket = new WebSocket('ws://localhost:8080');
 
 socket.onmessage = (event) => {
   const raw = event.data.trim();
   const parts = raw.split(',');
 
-  const alpha = parseFloat(parts[2]); // تأكد أن هذا هو Alpha من القناة الصحيحة
+  const alpha = parseFloat(parts[2]);
 
   if (isNaN(alpha)) return;
 
@@ -96,7 +92,6 @@ socket.onmessage = (event) => {
     velocity = lift;
   }
 
-  // بلينك مؤقت بناءً على spike
   if (alpha > alphaBaseline * 2.0) {
     showBlink = true;
     clearTimeout(blinkTimeout);

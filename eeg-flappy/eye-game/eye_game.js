@@ -12,7 +12,7 @@ const dotSpeed = 6;
 let leftSignal = 0;
 let rightSignal = 0;
 
-const threshold = 100; // حساس لتحديد الحركة — عدله حسب إشارتك
+const threshold = 100; 
 
 function drawBox() {
   ctx.fillStyle = '#00FFFF';
@@ -43,14 +43,12 @@ function update() {
 
 update();
 
-// WebSocket
 const socket = new WebSocket('ws://localhost:8080');
 
 socket.onmessage = (event) => {
   const raw = event.data.trim();
   const parts = raw.split(',');
 
-  // تأكد أن القيم الصحيحة هي N1P = parts[2], N2P = parts[3]
   const left = parseFloat(parts[2]);
   const right = parseFloat(parts[3]);
 
@@ -62,16 +60,13 @@ socket.onmessage = (event) => {
   const diff = right - left;
 
   if (diff > threshold) {
-    // عينك يمين
     dotX += dotSpeed;
     boxX += moveStep;
   } else if (diff < -threshold) {
-    // عينك يسار
     dotX -= dotSpeed;
     boxX -= moveStep;
   }
 
-  // حدود الشاشة
   if (dotX < 0) dotX = 0;
   if (dotX > 400) dotX = 400;
 
